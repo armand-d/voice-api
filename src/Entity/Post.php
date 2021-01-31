@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PostRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
+ * @ApiResource()
  */
 class Post
 {
@@ -19,12 +21,12 @@ class Post
     Use Timestapable;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private string $title;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private string $sound_path;
 
@@ -34,12 +36,12 @@ class Post
     private string $img_path;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="enum('fr', 'en')")
+     * @ORM\Column(type="string", columnDefinition="enum('fr', 'en')", nullable=false)
      */
     private string $lang;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="enum('drafted', 'published', 'deleted', 'banned')")
+     * @ORM\Column(type="string", columnDefinition="enum('drafted', 'published', 'deleted', 'banned')", nullable=false)
      */
     private string $status;
 
@@ -54,7 +56,7 @@ class Post
      * @ORM\ManyToMany(targetEntity=User::class)
      * @ORM\JoinTable(name="post_likes")
      */
-    private User $liked_by;
+    private Collection $liked_by;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
@@ -134,12 +136,12 @@ class Post
         return $this;
     }
 
-    public function getAuthorId(): ?User
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
 
-    public function setAuthorId(?User $author): self
+    public function setAuthor(?User $author): self
     {
         $this->author = $author;
 
@@ -151,23 +153,25 @@ class Post
      */
     public function getLikedBy(): Collection
     {
-        return $this->liked_by;
+        return $this->likedBy;
     }
 
-    public function addLikedBy(User $likedBy): self
+    public function addLikedBy(User $user): void
     {
-        if (!$this->liked_by->contains($likedBy)) {
-            $this->liked_by[] = $likedBy;
+        if ($this->likedBy->contains($user)) {
+            return;
         }
 
-        return $this;
+        $this->likedBy->add($user);
     }
 
-    public function removeLikedBy(User $likedBy): self
+    public function removeLikedBy(User $user): void
     {
-        $this->liked_by->removeElement($likedBy);
+        if (!$this->likedBy->contains($user)) {
+            return;
+        }
 
-        return $this;
+        $this->likedBy->removeElement($user);
     }
 
     public function getPublishedAt(): ?\DateTimeInterface

@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
+ * @ApiResource()
  */
 class Comment
 {
@@ -16,12 +18,12 @@ class Comment
     Use Timestapable;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private string $sound_path;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="enum('fr', 'en')")
+     * @ORM\Column(type="string", columnDefinition="enum('fr', 'en')", nullable=false)
      */
     private string $lang;
 
@@ -44,7 +46,7 @@ class Comment
     private \DateTimeImmutable $published_at;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="enum('published', 'deleted', 'banned')")
+     * @ORM\Column(type="string", columnDefinition="enum('published', 'deleted', 'banned')", nullable=false)
      */
     private string $status;
 

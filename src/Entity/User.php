@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,6 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
+ * @ApiResource()
  */
 class User implements UserInterface
 {
@@ -20,7 +22,7 @@ class User implements UserInterface
     Use Timestapable;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=180, unique=true, nullable=false)
      */
     private string $email;
 
@@ -31,7 +33,7 @@ class User implements UserInterface
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=false)
      */
     private string $password;
 
@@ -41,27 +43,27 @@ class User implements UserInterface
     private Collection $posts;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private string $first_name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private string $last_name;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255, unique=true, nullable=false)
      */
     private string $account_name;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="enum('fr', 'en')")
+     * @ORM\Column(type="string", columnDefinition="enum('fr', 'en')", nullable=false)
      */
     private string $lang;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="enum('enabled', 'deleted', 'banned')")
+     * @ORM\Column(type="string", columnDefinition="enum('enabled', 'deleted', 'banned')", nullable=false)
      */
     private string $status;
 
@@ -157,7 +159,7 @@ class User implements UserInterface
     {
         if (!$this->posts->contains($post)) {
             $this->posts[] = $post;
-            $post->setAuthorId($this);
+            $post->setAuthor($this);
         }
 
         return $this;
@@ -167,8 +169,8 @@ class User implements UserInterface
     {
         if ($this->posts->removeElement($post)) {
             // set the owning side to null (unless already changed)
-            if ($post->getAuthorId() === $this) {
-                $post->setAuthorId(null);
+            if ($post->getAuthor() === $this) {
+                $post->setAuthor(null);
             }
         }
 
