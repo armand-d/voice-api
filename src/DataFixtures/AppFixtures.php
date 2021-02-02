@@ -12,12 +12,12 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
-    // private UserPasswordEncoderInterface $passwordEncoder;
+    private UserPasswordEncoderInterface $passwordEncoder;
 
-    // public function __construct(UserPasswordEncoderInterface $passwordEncoder)
-    // {
-    //     $this->passwordEncoder = $passwordEncoder;
-    // }
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
 
     public function load(ObjectManager $manager)
     {
@@ -26,10 +26,10 @@ class AppFixtures extends Fixture
         for ($u=0; $u < 10; $u++) { 
             $user = new User();
 
-            // $passHash = $this->passwordEncoder->encodePassword($user, plainPassword: 'password');
+            $passHash = $this->passwordEncoder->encodePassword($user, 'password');
 
             $user->setEmail($faker->email)
-                // ->setPassword($passHash)
+                ->setPassword($passHash)
                 ->setFirstName($faker->name)
                 ->setLastName($faker->name)
                 ->setAccountName($faker->name)
@@ -40,7 +40,7 @@ class AppFixtures extends Fixture
 
             for ($a=0; $a < random_int(0, 10); $a++) { 
                 $post = (new Post())->setAuthor($user)
-                    // ->setTitle($faker->text(maxNbChars: 30))
+                    ->setTitle($faker->text(30))
                     ->setImgPath('../../img-%d.png', $a)
                     ->setSoundPath('../../sound-%d.wov', $a) 
                     ->setLang('fr')

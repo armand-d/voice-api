@@ -9,10 +9,26 @@ use App\Repository\PostRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ *  collectionOperations={
+ *      "get"={
+ *          "normalization_context"={"groups"={"post_read"}}
+ *      },
+ *      "post"
+ *  },
+ *  itemOperations={
+ *      "get"={
+ *          "normalization_context"={"groups"={"post_details_read"}}
+ *      },
+ *      "put",
+ *      "patch",
+ *      "delete"
+ *  }
+ * )
  */
 class Post
 {
@@ -22,26 +38,31 @@ class Post
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
+     * @Groups({"user_details_read", "post_read", "post_details_read"})
      */
     private string $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
+     * @Groups({"user_details_read",  "post_read", "post_details_read"})
      */
     private string $sound_path;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"user_details_read", "post_read", "post_details_read"})
      */
     private string $img_path;
 
     /**
      * @ORM\Column(type="string", columnDefinition="enum('fr', 'en')", nullable=false)
+     * @Groups({"user_details_read",  "post_read", "post_details_read"})
      */
     private string $lang;
 
     /**
      * @ORM\Column(type="string", columnDefinition="enum('drafted', 'published', 'deleted', 'banned')", nullable=false)
+     * @Groups({"user_details_read",  "post_read", "post_details_read"})
      */
     private string $status;
 
@@ -49,6 +70,7 @@ class Post
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
      * @ORM\JoinColumn(onDelete="CASCADE")
+     * @Groups({"post_read"})
      */
     private User $author;
 

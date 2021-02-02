@@ -10,11 +10,27 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
- * @ApiResource()
+ * @ApiResource(
+ *  collectionOperations={
+ *      "get"={
+ *          "normalization_context"={"groups"={"user_read"}}
+ *      },
+ *      "post"
+ *  },
+ *  itemOperations={
+ *      "get"={
+ *          "normalization_context"={"groups"={"user_details_read"}}
+ *      },
+ *      "put",
+ *      "patch",
+ *      "delete"
+ *  }
+ * )
  */
 class User implements UserInterface
 {
@@ -23,6 +39,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true, nullable=false)
+     * @Groups({"user_read", "user_details_read"})
      */
     private string $email;
 
@@ -39,11 +56,13 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="author")
+     * @Groups({"user_details_read"})
      */
     private Collection $posts;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
+     * @Groups({"user_details_read"})
      */
     private string $first_name;
 
@@ -54,18 +73,19 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, unique=true, nullable=false)
+     * @Groups({"user_details_read", "post_read", "post_details_read"})
      */
     private string $account_name;
 
-    /**
+    /**z
      * @ORM\Column(type="string", columnDefinition="enum('fr', 'en')", nullable=false)
      */
-    private string $lang;
+    private string $lang = "en";
 
     /**
      * @ORM\Column(type="string", columnDefinition="enum('enabled', 'deleted', 'banned')", nullable=false)
      */
-    private string $status;
+    private string $status = "enabled";
 
     public function __construct()
     {
