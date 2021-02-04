@@ -20,12 +20,12 @@ class Comment
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private string $sound_path;
+    private string $soundPath;
 
     /**
      * @ORM\Column(type="string", columnDefinition="enum('fr', 'en')", nullable=false)
      */
-    private string $lang;
+    private string $lang = "en";
 
     /**
      * @ORM\ManyToOne(targetEntity=Post::class, inversedBy="comments")
@@ -43,12 +43,12 @@ class Comment
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
-    private \DateTimeImmutable $published_at;
+    private \DateTimeImmutable $publishedAt;
 
     /**
      * @ORM\Column(type="string", columnDefinition="enum('published', 'deleted', 'banned')", nullable=false)
      */
-    private string $status;
+    private string $status = "published";
 
     public function __construct()
     {
@@ -57,12 +57,12 @@ class Comment
 
     public function getSoundPath(): ?string
     {
-        return $this->sound_path;
+        return $this->soundPath;
     }
 
-    public function setSoundPath(string $sound_path): self
+    public function setSoundPath(string $soundPath): self
     {
-        $this->sound_path = $sound_path;
+        $this->soundPath = $soundPath;
 
         return $this;
     }
@@ -103,14 +103,14 @@ class Comment
         return $this;
     }
 
-    public function getPublishedAt(): ?\DateTimeInterface
+    public function getpublishedAt(): ?\DateTimeInterface
     {
-        return $this->published_at;
+        return $this->publishedAt;
     }
 
-    public function setPublishedAt(?\DateTimeInterface $published_at): self
+    public function setpublishedAt(?\DateTimeInterface $publishedAt): self
     {
-        $this->published_at = $published_at;
+        $this->publishedAt = $publishedAt;
 
         return $this;
     }

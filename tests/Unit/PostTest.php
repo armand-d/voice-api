@@ -81,7 +81,7 @@ class PostTest extends TestCase
     //     self::assertEquals($value, $this->post->getTitle());
     // }
 
-    // public function testGetPublishedAt(): void
+    // public function testGetpublishedAt(): void
     // {
     //     $value = 'Title test';
     //     $response = $this->post->setTitle($value);

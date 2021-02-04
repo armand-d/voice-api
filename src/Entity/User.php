@@ -11,6 +11,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -31,6 +34,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      "delete"
  *  }
  * )
+ * @ApiFilter(SearchFilter::class, properties={"email": "partial"})
+ * @ApiFilter(DateFilter::class, properties={"createdAt"})
  */
 class User implements UserInterface
 {
@@ -64,18 +69,18 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=false)
      * @Groups({"user_details_read"})
      */
-    private string $first_name;
+    private string $firstName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private string $last_name;
+    private string $lastName;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true, nullable=false)
      * @Groups({"user_details_read", "post_read", "post_details_read"})
      */
-    private string $account_name;
+    private string $accountName;
 
     /**z
      * @ORM\Column(type="string", columnDefinition="enum('fr', 'en')", nullable=false)
@@ -94,6 +99,11 @@ class User implements UserInterface
         $this->createdAt = new \DateTimeImmutable();
     }
 
+    // public function getId(): ?int
+    // {
+    //     return $this->id;
+    // }
+    
     public function getEmail(): ?string
     {
         return $this->email;
@@ -199,36 +209,36 @@ class User implements UserInterface
 
     public function getFirstName(): ?string
     {
-        return $this->first_name;
+        return $this->firstName;
     }
 
-    public function setFirstName(string $first_name): self
+    public function setFirstName(string $firstName): self
     {
-        $this->first_name = $first_name;
+        $this->firstName = $firstName;
 
         return $this;
     }
 
     public function getLastName(): ?string
     {
-        return $this->last_name;
+        return $this->lastName;
     }
 
-    public function setLastName(string $last_name): self
+    public function setLastName(string $lastName): self
     {
-        $this->last_name = $last_name;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
     public function getAccountName(): ?string
     {
-        return $this->account_name;
+        return $this->accountName;
     }
 
-    public function setAccountName(string $account_name): self
+    public function setAccountName(string $accountName): self
     {
-        $this->account_name = $account_name;
+        $this->accountName = $accountName;
 
         return $this;
     }

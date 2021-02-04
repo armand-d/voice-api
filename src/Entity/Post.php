@@ -10,6 +10,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\PostUpdatedAt;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
@@ -26,13 +28,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      },
  *      "put",
  *      "patch",
- *      "delete"
+ *      "delete",
+ *      "put_updated_at"={
+ *           "method"= "PUT",
+ *           "path"= "/posts/{id}/updated-at",
+ *           "controller"= PostUpdatedAt::class,
+ *       },
  *  }
  * )
  */
 class Post
 {
-
     Use ResourceId;
     Use Timestapable;
 
@@ -46,44 +52,46 @@ class Post
      * @ORM\Column(type="string", length=255, nullable=false)
      * @Groups({"user_details_read",  "post_read", "post_details_read"})
      */
-    private string $sound_path;
+    private string $soundPath;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"user_details_read", "post_read", "post_details_read"})
      */
-    private string $img_path;
+    private string $imgPath;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="enum('fr', 'en')", nullable=false)
+     * @ORM\Column(type="string", columnDefinition="enum('fr', 'en')", nullable=false, options={"default" : "fr"})
      * @Groups({"user_details_read",  "post_read", "post_details_read"})
      */
-    private string $lang;
+    private string $lang = "fr";
 
     /**
      * @ORM\Column(type="string", columnDefinition="enum('drafted', 'published', 'deleted', 'banned')", nullable=false)
      * @Groups({"user_details_read",  "post_read", "post_details_read"})
      */
-    private string $status;
+    private string $status = "drafted";
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
      * @ORM\JoinColumn(onDelete="CASCADE")
-     * @Groups({"post_read"})
+     * @Groups({"post_read", "post_details_read"})
      */
-    private User $author;
+    private UserInterface $author;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class)
      * @ORM\JoinTable(name="post_likes")
+     * @Groups({"post_read"})
      */
-    private Collection $liked_by;
+    private Collection $likedBy;
 
     /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"post_read"})
      */
-    private \DateTimeImmutable $published_at;
+    private \DateTime $publishedAt;
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="post", orphanRemoval=true)
@@ -92,10 +100,11 @@ class Post
 
     public function __construct()
     {
-        $this->liked_by = new ArrayCollection();
+        $this->likedBy = new ArrayCollection();
         $this->comments = new ArrayCollection();
 
         $this->createdAt = new \DateTimeImmutable();
+        $this->publishedAt = new \DateTime();
     }
 
     public function getTitle(): ?string
@@ -112,24 +121,24 @@ class Post
 
     public function getSoundPath(): ?string
     {
-        return $this->sound_path;
+        return $this->soundPath;
     }
 
-    public function setSoundPath(string $sound_path): self
+    public function setSoundPath(string $soundPath): self
     {
-        $this->sound_path = $sound_path;
+        $this->soundPath = $soundPath;
 
         return $this;
     }
 
     public function getImgPath(): ?string
     {
-        return $this->img_path;
+        return $this->imgPath;
     }
 
-    public function setImgPath(?string $img_path): self
+    public function setImgPath(?string $imgPath): self
     {
-        $this->img_path = $img_path;
+        $this->imgPath = $imgPath;
 
         return $this;
     }
@@ -158,12 +167,12 @@ class Post
         return $this;
     }
 
-    public function getAuthor(): ?User
+    public function getAuthor(): UserInterface
     {
         return $this->author;
     }
 
-    public function setAuthor(?User $author): self
+    public function setAuthor(UserInterface $author): self
     {
         $this->author = $author;
 
@@ -196,14 +205,14 @@ class Post
         $this->likedBy->removeElement($user);
     }
 
-    public function getPublishedAt(): ?\DateTimeInterface
+    public function getpublishedAt(): ?\DateTime
     {
-        return $this->published_at;
+        return $this->publishedAt;
     }
 
-    public function setPublishedAt(?\DateTimeInterface $published_at): self
+    public function setpublishedAt(?\DateTime $publishedAt): self
     {
-        $this->published_at = $published_at;
+        $this->publishedAt = $publishedAt;
 
         return $this;
     }
