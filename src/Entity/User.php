@@ -14,15 +14,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert ;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
  * @ApiResource(
  *  collectionOperations={
- *      "get"={
- *          "normalization_context"={"groups"={"user_read"}}
- *      },
+ *      "get",
  *      "post"
  *  },
  *  itemOperations={
@@ -36,6 +36,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
  * )
  * @ApiFilter(SearchFilter::class, properties={"email": "partial"})
  * @ApiFilter(DateFilter::class, properties={"createdAt"})
+ * @UniqueEntity("email", message="This email is not available")
  */
 class User implements UserInterface
 {
@@ -45,6 +46,8 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true, nullable=false)
      * @Groups({"user_read", "user_details_read"})
+     * @Assert\NotBlank(message="email mandatory")
+     * @Assert\Email(message="email format invalid")
      */
     private string $email;
 
@@ -56,6 +59,7 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=false)
+     * @Assert\NotBlank(message="password mandatory")
      */
     private string $password;
 
@@ -67,12 +71,13 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
-     * @Groups({"user_details_read"})
+     * @Groups({"user_read", "user_details_read"})
      */
     private string $firstName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
+     * @Groups({"user_read", "user_details_read"})
      */
     private string $lastName;
 
@@ -99,11 +104,6 @@ class User implements UserInterface
         $this->createdAt = new \DateTimeImmutable();
     }
 
-    // public function getId(): ?int
-    // {
-    //     return $this->id;
-    // }
-    
     public function getEmail(): ?string
     {
         return $this->email;

@@ -34,8 +34,30 @@ services:
         decorates: 'api_platform.openapi.factory'
         autoconfigure: false
 
-    acme_api.event.jwt_created_listener:
+    voice.event.jwt_created_listener:
         class: App\EventListener\JWTCreatedListener
         arguments: [ '@request_stack' ]
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+
+    voice.exception_subscriber:
+        class: App\Events\ExceptionSubscriber
+        arguments:
+            - '@serializer'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    voice.normalizer.resource_access_exception:
+        class: App\Normalizer\ResourceAccessExceptionNormalizer
+        arguments:
+            - { type: 'App\Exceptions\ResourceAccessException' }
+        tags:
+            - { name: voice.normalizer }
+
+    voice.normalizer.authentication_exception:
+        class: App\Normalizer\AuthenticationExceptionNormalizer
+        arguments:
+            - { type: 'App\Exceptions\AuthenticationException' }
+        tags:
+            - { name: voice.normalizer }
+

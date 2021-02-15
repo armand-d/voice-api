@@ -15,17 +15,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
+ * @ORM\Table(name="`post`")
  * @ApiResource(
  *  collectionOperations={
- *      "get"={
- *          "normalization_context"={"groups"={"post_read"}}
- *      },
+ *      "get",
  *      "post"
  *  },
  *  itemOperations={
- *      "get"={
- *          "normalization_context"={"groups"={"post_details_read"}}
- *      },
+ *      "get",
  *      "put",
  *      "patch",
  *      "delete",
@@ -37,6 +34,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *  }
  * )
  */
+
 class Post
 {
     Use ResourceId;

@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Post;
 
-Class CurrentUserForPostsSubscriber implements EventSubscriberInterface
+class CurrentUserForPostsSubscriber implements EventSubscriberInterface
 {
     /**
      * @var Security
@@ -25,7 +25,7 @@ Class CurrentUserForPostsSubscriber implements EventSubscriberInterface
     }
 
     public static function getSubscribedEvents()
-    {  
+    {
         return [
             KernelEvents::VIEW => ['currentUserForPosts', EventPriorities::PRE_VALIDATE]
         ];
@@ -38,6 +38,6 @@ Class CurrentUserForPostsSubscriber implements EventSubscriberInterface
 
         if ($post instanceof Post && Request::METHOD_POST === $method) {
             $post->setAuthor($this->security->getUser());
-        } 
+        }
     }
 }

@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-Class JWTCreatedListener
+class JWTCreatedListener
 {
-    private UserInterface $user;
+    private ?UserInterface $user;
 
     public function __construct(RequestStack $requestStack, Security $security)
 {
@@ -21,9 +21,11 @@ Class JWTCreatedListener
 
     public function onJWTCreated(JWTCreatedEvent $event): void
     {
-        $payload = $event->getData();
-        $payload['createdAt'] = $this->user->getCreatedAt();
-
-        $event->setData($payload);
-    }  
+        if (null !== $this->user)
+        {
+            $payload = $event->getData();
+            $payload['createdAt'] = $this->user->getCreatedAt();
+            $event->setData($payload);
+        }
+    }
 }

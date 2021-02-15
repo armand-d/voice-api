@@ -6,7 +6,7 @@ namespace App\Entity;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 
-trait ResourceId 
+trait ResourceId
 {
     /**
      * @ORM\Id

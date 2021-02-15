@@ -6,7 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Post;
 
-Class PostUpdatedAt 
+class PostUpdatedAt
 {
     public function __invoke(Post $data): Post
     {
