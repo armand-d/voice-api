@@ -23,7 +23,7 @@ class Comment
     private string $soundPath;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="enum('fr', 'en')", nullable=false)
+     * @ORM\Column(type="string", nullable=false)
      */
     private string $lang = "en";
 
@@ -46,7 +46,7 @@ class Comment
     private \DateTimeImmutable $publishedAt;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="enum('published', 'deleted', 'banned')", nullable=false)
+     * @ORM\Column(type="string", nullable=false)
      */
     private string $status = "published";
 

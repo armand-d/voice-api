@@ -59,13 +59,13 @@ class Post
     private string $imgPath;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="enum('fr', 'en')", nullable=false, options={"default" : "fr"})
+     * @ORM\Column(type="string", nullable=false, options={"default" : "fr"})
      * @Groups({"user_details_read",  "post_read", "post_details_read"})
      */
     private string $lang = "fr";
 
     /**
-     * @ORM\Column(type="string", columnDefinition="enum('drafted', 'published', 'deleted', 'banned')", nullable=false)
+     * @ORM\Column(type="string", nullable=false)
      * @Groups({"user_details_read",  "post_read", "post_details_read"})
      */
     private string $status = "drafted";

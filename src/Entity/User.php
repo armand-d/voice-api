@@ -88,12 +88,12 @@ class User implements UserInterface
     private string $accountName;
 
     /**z
-     * @ORM\Column(type="string", columnDefinition="enum('fr', 'en')", nullable=false)
+     * @ORM\Column(type="string", nullable=false)
      */
     private string $lang = "en";
 
     /**
-     * @ORM\Column(type="string", columnDefinition="enum('enabled', 'deleted', 'banned')", nullable=false)
+     * @ORM\Column(type="string", nullable=false)
      */
     private string $status = "enabled";
 
