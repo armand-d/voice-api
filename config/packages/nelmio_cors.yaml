@@ -14,10 +14,9 @@ nelmio_cors:
         origin_regex: true
         allow_credentials: true
         allow_origin: ['*']
-        allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
-        allow_headers: ['Authorization','X-Requested-With','Content-Type','Cache-Control']
+        allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE', 'CONNECT', 'TRACE']
+        allow_headers: ['Authorization','X-Requested-With','Content-Type','Cache-Control', 'origin', 'accept', 'client-security-token']
         expose_headers: ['Link', 'Content-Type', 'Content-Length', 'Content-Disposition']
         max_age: 3600
     paths:
         '^/': ~
-
