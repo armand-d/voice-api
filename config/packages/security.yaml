@@ -16,6 +16,7 @@ security:
             security: false
         login:
             pattern:  ^/api/login
+            methods: [POST]
             stateless: true
             anonymous: true
             json_login:
@@ -35,7 +36,7 @@ security:
                     - lexik_jwt_authentication.jwt_token_authenticator
         posts:
             pattern:   ^/api/posts
-            methods: [POST, PUT, PATCH, DELETE]
+            methods: [GET, POST, PUT, PATCH, DELETE]
             stateless: true
             guard:
                 authenticators:
@@ -54,6 +55,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY, methods: [PUT, PATCH, DELETE] }
-        - { path: ^/api/posts, roles: IS_AUTHENTICATED_FULLY, methods: [POST, PUT, PATCH, DELETE] }
+        - { path: ^/api/posts, roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PUT, PATCH, DELETE] }
