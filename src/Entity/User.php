@@ -15,7 +15,8 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert ;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Controller\UserController;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -31,7 +32,12 @@ use Symfony\Component\Validator\Constraints as Assert ;
  *      },
  *      "put",
  *      "patch",
- *      "delete"
+ *      "delete",
+ *      "get_me"={
+ *           "method"= "PUT",
+ *           "path"= "/users/me",
+ *           "controller"= UserController::class,
+ *       },
  *  }
  * )
  * @ApiFilter(SearchFilter::class, properties={"email": "partial"})

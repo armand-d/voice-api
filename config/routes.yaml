@@ -10,3 +10,10 @@ api_login_check:
 gesdinet_jwt_refresh_token:
     path:       /api/token/refresh
     controller: gesdinet.jwtrefreshtoken::refresh
+book_post_publication:
+    path: /api/users/me
+    methods: ['GET']
+    defaults:
+        _controller: App\Controller\UserController::class
+        _api_resource_class: App\Entity\User
+        _api_item_operation_name: get_me
