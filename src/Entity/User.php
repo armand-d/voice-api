@@ -34,7 +34,7 @@ use App\Controller\UserController;
  *      "patch",
  *      "delete",
  *      "get_me"={
- *           "method"= "PUT",
+ *           "method"= "GET",
  *           "path"= "/users/me",
  *           "controller"= UserController::class,
  *       },
