@@ -35,7 +35,7 @@ use App\Controller\UserController;
  *      "delete",
  *      "get_me"={
  *           "method"= "GET",
- *           "path"= "/users/me",
+ *           "path"= "/me",
  *           "controller"= UserController::class,
  *       },
  *  }
