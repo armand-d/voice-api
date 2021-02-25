@@ -16,7 +16,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Controller\UserController;
+use App\Controller\GetMeAction;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -28,16 +28,22 @@ use App\Controller\UserController;
  *  },
  *  itemOperations={
  *      "get"={
- *          "normalization_context"={"groups"={"user_details_read"}}
+ *          "normalization_context"={"groups"={"user_details_read", "me"}},
+ *          "requirements"={"id"="\d+"}
  *      },
  *      "put",
  *      "patch",
  *      "delete",
  *      "get_me"={
- *           "method"= "GET",
- *           "path"= "/me",
- *           "controller"= UserController::class,
- *       },
+ *          "method"="GET",
+ *          "path"="/users/me",
+ *          "controller"=GetMeAction::class,
+ *          "normalization_context"={"groups"={"me"}},
+ *          "openapi_context"={
+ *              "parameters"={}
+ *          },
+ *          "read"=false
+ *      }
  *  }
  * )
  * @ApiFilter(SearchFilter::class, properties={"email": "partial"})
@@ -51,7 +57,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true, nullable=false)
-     * @Groups({"user_read", "user_details_read"})
+     * @Groups({"user_read", "user_details_read", "me"})
      * @Assert\NotBlank(message="email mandatory")
      * @Assert\Email(message="email format invalid")
      */
@@ -71,35 +77,37 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="author")
-     * @Groups({"user_details_read"})
+     * @Groups({"user_details_read", "me"})
      */
     private Collection $posts;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
-     * @Groups({"user_read", "user_details_read"})
+     * @Groups({"user_read", "user_details_read", "me"})
      */
     private string $firstName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
-     * @Groups({"user_read", "user_details_read"})
+     * @Groups({"user_read", "user_details_read", "me"})
      */
     private string $lastName;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true, nullable=false)
-     * @Groups({"user_details_read", "post_read", "post_details_read"})
+     * @Groups({"user_details_read", "me", "post_read", "post_details_read"})
      */
     private string $accountName;
 
     /**z
      * @ORM\Column(type="string", nullable=false)
+     * @Groups({"user_details_read", "me", "post_read", "post_details_read"})
      */
     private string $lang = "en";
 
     /**
      * @ORM\Column(type="string", nullable=false)
+     * @Groups({"user_details_read", "me", "post_read", "post_details_read"})
      */
     private string $status = "enabled";
 

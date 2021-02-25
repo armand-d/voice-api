@@ -42,31 +42,31 @@ class Post
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
-     * @Groups({"user_details_read", "post_read", "post_details_read"})
+     * @Groups({"user_details_read", "me", "post_read", "post_details_read"})
      */
     private string $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
-     * @Groups({"user_details_read",  "post_read", "post_details_read"})
+     * @Groups({"user_details_read", "me",  "post_read", "post_details_read"})
      */
     private string $soundPath;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"user_details_read", "post_read", "post_details_read"})
+     * @Groups({"user_details_read", "me", "post_read", "post_details_read"})
      */
     private string $imgPath;
 
     /**
      * @ORM\Column(type="string", nullable=false, options={"default" : "fr"})
-     * @Groups({"user_details_read",  "post_read", "post_details_read"})
+     * @Groups({"user_details_read", "me",  "post_read", "post_details_read"})
      */
     private string $lang = "fr";
 
     /**
      * @ORM\Column(type="string", nullable=false)
-     * @Groups({"user_details_read",  "post_read", "post_details_read"})
+     * @Groups({"user_details_read", "me",  "post_read", "post_details_read"})
      */
     private string $status = "drafted";
 

@@ -8,8 +8,9 @@ use App\Entity\User;
 
 class UserController
 {
-    public function __construct()
+    public function __invoke()
     {
         dd('ok');
+        return 'ok';
     }
 }
