@@ -77,7 +77,7 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="author")
-     * @Groups({"user_details_read", "me"})
+     * @Groups({"user_details_read"})
      */
     private Collection $posts;
 

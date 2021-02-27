@@ -28,8 +28,15 @@ security:
             stateless: true
             anonymous: true
         users:
-            pattern:   ^/api/users
+            pattern: ^/api/users
             methods: [POST, PUT, PATCH, DELETE]
+            stateless: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+        users_me:
+            pattern: ^/api/users/me
+            methods: [GET]
             stateless: true
             guard:
                 authenticators:
@@ -57,5 +64,6 @@ security:
     access_control:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PUT, PATCH, DELETE] }
+        - { path: ^/api/users/me, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
+        - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY, methods: [POST, PUT, PATCH, DELETE] }
         - { path: ^/api/posts, roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PUT, PATCH, DELETE] }
