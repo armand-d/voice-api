@@ -84,31 +84,31 @@ class User implements UserInterface
     private Collection $posts;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"user_details_read", "me"})
      */
     private string $firstName;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"user_details_read", "me"})
      */
     private string $lastName;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true, nullable=false)
+     * @ORM\Column(type="string", length=255, unique=true, nullable=true)
      * @Groups({"user_details_read", "me", "post_read", "post_details_read"})
      */
     private string $accountName;
 
     /**z
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", nullable=true)
      * @Groups({"user_details_read", "me", "post_read", "post_details_read"})
      */
     private string $lang = "en";
 
     /**
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", nullable=true)
      * @Groups({"user_details_read", "me", "post_read", "post_details_read"})
      */
     private string $status = "enabled";
