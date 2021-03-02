@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\ExistsFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -23,12 +23,14 @@ use App\Controller\GetMeAction;
  * @ORM\Table(name="`user`")
  * @ApiResource(
  *  collectionOperations={
- *      "get",
+ *      "get"={
+ *          "normalization_context"={"groups"={"user_read"}}
+ *      },
  *      "post"
  *  },
  *  itemOperations={
  *      "get"={
- *          "normalization_context"={"groups"={"user_details_read", "me"}},
+ *          "normalization_context"={"groups"={"user_details_read"}},
  *          "requirements"={"id"="\d+"}
  *      },
  *      "put",
@@ -46,7 +48,7 @@ use App\Controller\GetMeAction;
  *      }
  *  }
  * )
- * @ApiFilter(SearchFilter::class, properties={"email": "partial"})
+ * @ApiFilter(ExistsFilter::class, properties={"email": "exact"})
  * @ApiFilter(DateFilter::class, properties={"createdAt"})
  * @UniqueEntity("email", message="This email is not available")
  */
@@ -83,13 +85,13 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
-     * @Groups({"user_read", "user_details_read", "me"})
+     * @Groups({"user_details_read", "me"})
      */
     private string $firstName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
-     * @Groups({"user_read", "user_details_read", "me"})
+     * @Groups({"user_details_read", "me"})
      */
     private string $lastName;
 
